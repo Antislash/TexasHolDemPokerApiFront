@@ -1,5 +1,6 @@
 import { AuthProvider } from './context/provider/AuthProvider'
 import { Navigation } from './pages/singles/login/Navigation'
+import { RoomBrowse } from './pages/RoomBrowse'
 
 function App() {
 
@@ -7,10 +8,10 @@ function App() {
     <>
       <AuthProvider>
         <Navigation/>
+        <div className="container">
+          <RoomBrowse/>
+        </div>
       </AuthProvider>
-      <div className="container">
-
-      </div>
     </>
   )
 }
