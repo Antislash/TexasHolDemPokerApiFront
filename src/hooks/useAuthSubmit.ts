@@ -13,6 +13,7 @@ export function useAuthSubmit(url: string, onSuccess: () => void) {
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify(data)
         })
         .then(r => {
@@ -23,7 +24,7 @@ export function useAuthSubmit(url: string, onSuccess: () => void) {
             return r.json() as Promise<AuthResponse>
         })
         .then(data => {
-            login(data.token, data.pseudo, data.email)
+            login(data.pseudo, data.email)
             onSuccess()
         })
         .catch((error) => setError(error))

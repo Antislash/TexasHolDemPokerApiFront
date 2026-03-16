@@ -1,9 +1,7 @@
 import { useState } from "react"
-import { useAuth } from "./useAuth"
 import { RoomStatus } from "../types/RoomDto"
 
 export function useRoomSubmit(onSuccess: () => void) {
-    const { token } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
@@ -12,10 +10,8 @@ export function useRoomSubmit(onSuccess: () => void) {
         setLoading(true)
         fetch("https://localhost:44367/room", {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({ name: data.name, status: RoomStatus.Draft })
         })
         .then(r => {

@@ -33,10 +33,10 @@ function RoomCard({ room }: { room: RoomDto }) {
 }
 
 export function RoomBrowse() {
-    const { token } = useAuth()
+    const { isAuthenticated } = useAuth()
     const { rooms, error, loading, refresh } = useRooms()
 
-    if (!token) return null
+    if (!isAuthenticated) return null
 
     return (
         <div className="mt-3">

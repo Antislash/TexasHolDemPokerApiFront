@@ -12,7 +12,7 @@ export function Login()
 {
     const [log, toggleLog] = useToggle(false);
     const [register, toggleRegister] = useToggle(false);
-    const {pseudo, email, token, logout} = useAuth();
+    const { pseudo, email, logout, isAuthenticated: token } = useAuth();
 
     return (
         <div>
