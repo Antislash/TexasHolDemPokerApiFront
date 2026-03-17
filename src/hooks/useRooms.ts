@@ -1,24 +1,25 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "./useAuth"
-import type { RoomDto } from "../types/RoomDto"
+import type { RoomPlayerDto } from "../types/RoomPlayerDto"
+import { API_URL } from "../config"
 
 export function useRooms() {
     const { isAuthenticated } = useAuth()
 
-    const [rooms, setRooms] = useState<RoomDto[]>([])
+    const [rooms, setRooms] = useState<RoomPlayerDto[]>([])
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
     function fetchRooms() {
         setError('')
         setLoading(true)
-        fetch("https://localhost:44367/room", {
+        fetch(`${API_URL}/room`, {
             credentials: 'include'
         })
         .then(r => {
             if (r.status === 401) throw new Error("Non autorisé, veuillez vous connecter")
             if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
-            return r.json() as Promise<RoomDto[]>
+            return r.json() as Promise<RoomPlayerDto[]>
         })
         .then(setRooms)
         .catch((error) => setError(error))

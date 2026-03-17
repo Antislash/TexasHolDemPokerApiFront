@@ -9,4 +9,5 @@ export type RoomStatus = typeof RoomStatus[keyof typeof RoomStatus]
 export type RoomDto = {
     name: string
     status: RoomStatus
+    maxPlayers?: number
 }

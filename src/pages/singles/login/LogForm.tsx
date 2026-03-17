@@ -3,6 +3,7 @@ import { Input } from "../../../components/Input";
 import { Form } from "../../../components/Form";
 import { Modal } from "../../../components/Modal";
 import { useAuthSubmit } from "../../../hooks/useAuthSubmit";
+import { API_URL } from "../../../config";
 
 type LogFormProps = {
     toggleLogin: () => void
@@ -10,7 +11,7 @@ type LogFormProps = {
 
 export function LogForm({toggleLogin} : LogFormProps)
 {
-    const { handleSubmit, error, loading } = useAuthSubmit("https://localhost:44367/login/connect", toggleLogin)
+    const { handleSubmit, error, loading } = useAuthSubmit(`${API_URL}/login/connect`, toggleLogin)
 
     return (
         <Modal>

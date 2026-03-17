@@ -2,7 +2,8 @@ import { Alert } from "../components/Alert";
 import { Spinner } from "../components/Spinner";
 import { useAuth } from "../hooks/useAuth";
 import { useRooms } from "../hooks/useRooms";
-import { RoomStatus, type RoomDto } from "../types/RoomDto";
+import { RoomStatus } from "../types/RoomDto";
+import type { RoomPlayerDto } from "../types/RoomPlayerDto";
 import { RoomCreate } from "./singles/room/RoomCreate";
 
 const statusLabel: Record<RoomStatus, string> = {
@@ -17,7 +18,7 @@ const statusBadge: Record<RoomStatus, string> = {
     [RoomStatus.Deleted]: "danger",
 }
 
-function RoomCard({ room }: { room: RoomDto }) {
+function RoomCard({ room, players }: RoomPlayerDto) {
     return (
         <div className="col">
             <div className="card h-100">
@@ -26,6 +27,9 @@ function RoomCard({ room }: { room: RoomDto }) {
                     <span className={`badge bg-${statusBadge[room.status]}`}>
                         {statusLabel[room.status]}
                     </span>
+                    <p className="card-text mt-2 text-muted">
+                        {players.length}{room.maxPlayers ? `/${room.maxPlayers}` : ""} joueurs
+                    </p>
                 </div>
             </div>
         </div>
@@ -50,7 +54,7 @@ export function RoomBrowse() {
                 <p className="text-muted">Aucune room disponible.</p>
             )}
             <div className="row row-cols-1 row-cols-md-3 g-3">
-                {rooms.map((room, i) => <RoomCard key={i} room={room} />)}
+                {rooms.map((rp, i) => <RoomCard key={i} room={rp.room} players={rp.players} />)}
             </div>
         </div>
     )

@@ -3,9 +3,10 @@ import { Input } from "../../../components/Input";
 import { Form } from "../../../components/Form";
 import { Modal } from "../../../components/Modal";
 import { useAuthSubmit } from "../../../hooks/useAuthSubmit";
+import { API_URL } from "../../../config";
 
 export function RegisterForm({ toggleRegister }: { toggleRegister: () => void }) {
-    const { handleSubmit, error, loading } = useAuthSubmit("https://localhost:44367/login/register", toggleRegister)
+    const { handleSubmit, error, loading } = useAuthSubmit(`${API_URL}/login/register`, toggleRegister)
 
     return (
         <Modal>

@@ -26,6 +26,7 @@ export function RoomCreate({ onCreated }: RoomCreateProps) {
                 <Modal>
                     <Form onSubmit={handleSubmit} error={error} loading={loading} title="Créer une room">
                         <Input name="name" label="Nom de la room" placeholder="Nom"/>
+                        <Input name="maxPlayers" label="Nombre max de joueurs" placeholder="Par défaut" type="number"/>
                         <div className="hstack gap-2 justify-content-end">
                             <Button type="button" variant="secondary" onClick={toggleOpen}>Annuler</Button>
                             <Button type="submit">Créer</Button>

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { AuthContext } from "../AuthContext"
 import type { AuthContextType } from "../../types/AuthContextType"
+import { API_URL } from "../../config"
 
 interface AuthProviderProps extends React.PropsWithChildren {}
 
@@ -16,7 +17,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const logout = () => {
-        fetch("https://localhost:44367/login/logout", { method: 'POST', credentials: 'include' })
+        fetch(`${API_URL}/login/logout`, { method: 'POST', credentials: 'include' })
         localStorage.removeItem('pseudo')
         localStorage.removeItem('email')
         setPseudo(null)
