@@ -18,12 +18,18 @@ const statusBadge: Record<RoomStatus, string> = {
     [RoomStatus.Deleted]: "danger",
 }
 
-function RoomCard({ room, players }: RoomPlayerDto) {
+function RoomCard({ room, players, isMyRoom }: RoomPlayerDto & { isMyRoom: boolean }) {
     return (
         <div className="col">
-            <div className="card h-100">
+            <div className={`card h-100${isMyRoom ? " border-warning border-2" : ""}`}
+                 style={isMyRoom ? { backgroundColor: "#fffbea" } : undefined}>
                 <div className="card-body">
-                    <h5 className="card-title">{room.name}</h5>
+                    <div className="d-flex justify-content-between align-items-start">
+                        <h5 className="card-title mb-1">{room.name}</h5>
+                        {isMyRoom && (
+                            <span className="badge bg-warning text-dark ms-2">Mes rooms</span>
+                        )}
+                    </div>
                     <span className={`badge bg-${statusBadge[room.status]}`}>
                         {statusLabel[room.status]}
                     </span>
@@ -37,7 +43,7 @@ function RoomCard({ room, players }: RoomPlayerDto) {
 }
 
 export function RoomBrowse() {
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, pseudo } = useAuth()
     const { rooms, error, loading, refresh } = useRooms()
 
     if (!isAuthenticated) return null
@@ -54,7 +60,14 @@ export function RoomBrowse() {
                 <p className="text-muted">Aucune room disponible.</p>
             )}
             <div className="row row-cols-1 row-cols-md-3 g-3">
-                {rooms.map((rp, i) => <RoomCard key={i} room={rp.room} players={rp.players} />)}
+                {rooms.map((rp, i) => (
+                    <RoomCard
+                        key={i}
+                        room={rp.room}
+                        players={rp.players}
+                        isMyRoom={rp.players.some(p => p.pseudo === pseudo)}
+                    />
+                ))}
             </div>
         </div>
     )

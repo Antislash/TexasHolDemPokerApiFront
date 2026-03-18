@@ -7,6 +7,7 @@ export const RoomStatus = {
 export type RoomStatus = typeof RoomStatus[keyof typeof RoomStatus]
 
 export type RoomDto = {
+    id: number
     name: string
     status: RoomStatus
     maxPlayers?: number

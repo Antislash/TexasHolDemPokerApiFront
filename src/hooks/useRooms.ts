@@ -13,7 +13,7 @@ export function useRooms() {
     function fetchRooms() {
         setError('')
         setLoading(true)
-        fetch(`${API_URL}/room`, {
+        fetch(`${API_URL}/roomPlayer`, {
             credentials: 'include'
         })
         .then(r => {
