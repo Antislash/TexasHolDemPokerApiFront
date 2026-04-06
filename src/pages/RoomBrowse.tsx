@@ -3,15 +3,30 @@ import { Spinner } from "../components/Spinner";
 import { useAuth } from "../hooks/useAuth";
 import { useJoinRoom } from "../hooks/useJoinRoom"
 import { useLeaveRoom } from "../hooks/useLeaveRoom";
-import { useRooms } from "../hooks/useRooms";
+import { useStartGame } from "../hooks/useStartGame";
+import { RoomStatus } from "../types/RoomDto";
+import type { RoomPlayerDto } from "../types/RoomPlayerDto";
 import { RoomCard } from "./singles/room/RoomCard";
 import { RoomCreate } from "./singles/room/RoomCreate";
 
-export function RoomBrowse() {
+type RoomBrowseProps = {
+    rooms: RoomPlayerDto[]
+    roomsError: string
+    roomsLoading: boolean
+    onRefresh: () => void
+    onEnterGame: (rp: RoomPlayerDto) => void
+    joinGroup: (roomId: number) => void
+    leaveGroup: (roomId: number) => void
+}
+
+export function RoomBrowse({ rooms, roomsError, roomsLoading, onRefresh, onEnterGame, joinGroup, leaveGroup }: RoomBrowseProps) {
     const { isAuthenticated, pseudo } = useAuth()
-    const { rooms, error, loading, refresh } = useRooms()
-    const { joinRoom, error: joinError } = useJoinRoom(refresh)
-    const { leaveRoom, error: leaveError } = useLeaveRoom(refresh)
+    const { joinRoom, error: joinError } = useJoinRoom(onRefresh, joinGroup)
+    const { leaveRoom, error: leaveError } = useLeaveRoom(onRefresh, leaveGroup)
+    const { startGame, error: startError } = useStartGame((roomId) => {
+        const rp = rooms.find(r => r.room.id === roomId)
+        if (rp) onEnterGame({ room: { ...rp.room, status: RoomStatus.Playing }, players: rp.players })
+    })
 
     if (!isAuthenticated) return null
 
@@ -19,13 +34,14 @@ export function RoomBrowse() {
         <div className="mt-3">
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2>Rooms</h2>
-                <RoomCreate onCreated={refresh} />
+                <RoomCreate onCreated={onRefresh} />
             </div>
-            {error && <Alert type="danger">{error.toString()}</Alert>}
+            {roomsError && <Alert type="danger">{roomsError}</Alert>}
             {joinError && <Alert type="danger">{joinError}</Alert>}
             {leaveError && <Alert type="danger">{leaveError}</Alert>}
-            {loading && <Spinner />}
-            {!loading && rooms.length === 0 && (
+            {startError && <Alert type="danger">{startError}</Alert>}
+            {roomsLoading && <Spinner />}
+            {!roomsLoading && rooms.length === 0 && (
                 <p className="text-muted">Aucune room disponible.</p>
             )}
             <div className="row row-cols-1 row-cols-md-3 g-3">
@@ -38,6 +54,7 @@ export function RoomBrowse() {
                         currentPseudo={pseudo}
                         onJoin={joinRoom}
                         onLeave={leaveRoom}
+                        onStartGame={startGame}
                     />
                 ))}
             </div>

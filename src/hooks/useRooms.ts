@@ -2,9 +2,10 @@ import { useState, useEffect } from "react"
 import { useAuth } from "./useAuth"
 import type { RoomPlayerDto } from "../types/RoomPlayerDto"
 import { API_URL } from "../config"
+import { useRoomHub } from "./useRoomHub"
 
 export function useRooms() {
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, logout } = useAuth()
 
     const [rooms, setRooms] = useState<RoomPlayerDto[]>([])
     const [error, setError] = useState('')
@@ -17,12 +18,12 @@ export function useRooms() {
             credentials: 'include'
         })
         .then(r => {
-            if (r.status === 401) throw new Error("Non autorisé, veuillez vous connecter")
+            if (r.status === 401) { logout(); return }
             if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
             return r.json() as Promise<RoomPlayerDto[]>
         })
-        .then(setRooms)
-        .catch((error) => setError(error))
+        .then(data => { if (data) setRooms(data) })
+        .catch((err: Error) => setError(err.message))
         .finally(() => setLoading(false))
     }
 
@@ -30,5 +31,7 @@ export function useRooms() {
         if (isAuthenticated) fetchRooms()
     }, [isAuthenticated])
 
-    return { rooms, error, loading, refresh: fetchRooms }
+    const { joinGroup, leaveGroup } = useRoomHub(fetchRooms)
+
+    return { rooms, error, loading, refresh: fetchRooms, joinGroup, leaveGroup }
 }

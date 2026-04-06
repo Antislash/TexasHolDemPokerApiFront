@@ -13,7 +13,17 @@ const statusBadge: Record<RoomStatus, string> = {
     [RoomStatus.Deleted]: "danger",
 }
 
-export function RoomCard({ room, players, isMyRoom, currentPseudo, onJoin, onLeave }: RoomPlayerDto & { isMyRoom: boolean, currentPseudo: string | null, onJoin: (roomId: number) => void, onLeave: (roomId: number) => void }) {
+type RoomCardProps = RoomPlayerDto & {
+    isMyRoom: boolean
+    currentPseudo: string | null
+    onJoin: (roomId: number) => void
+    onLeave: (roomId: number) => void
+    onStartGame: (roomId: number) => void
+}
+
+export function RoomCard({ room, players, isMyRoom, currentPseudo, onJoin, onLeave, onStartGame }: RoomCardProps) {
+    const isDraft = room.status === RoomStatus.Draft
+
     return (
         <div className="col">
             <div className={`card h-100${isMyRoom ? " border-warning border-2" : ""}`}
@@ -38,15 +48,25 @@ export function RoomCard({ room, players, isMyRoom, currentPseudo, onJoin, onLea
                             </li>
                         ))}
                     </ul>
-                    {isMyRoom ? (
-                        <button className="btn btn-sm btn-danger mt-2" onClick={() => onLeave(room.id)}>
-                            Quitter
-                        </button>
-                    ) : (
-                        <button className="btn btn-sm btn-primary mt-2" onClick={() => onJoin(room.id)}>
-                            Rejoindre
-                        </button>
-                    )}
+                    <div className="d-flex gap-2 flex-wrap mt-2">
+                        {isMyRoom ? (
+                            <button className="btn btn-sm btn-danger" onClick={() => onLeave(room.id)}>
+                                Quitter
+                            </button>
+                        ) : (
+                            <button className="btn btn-sm btn-primary" onClick={() => onJoin(room.id)}>
+                                Rejoindre
+                            </button>
+                        )}
+                        {isMyRoom && isDraft && (
+                            <button
+                                className="btn btn-sm btn-success"
+                                onClick={() => onStartGame(room.id)}
+                            >
+                                🃏 Démarrer la partie
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

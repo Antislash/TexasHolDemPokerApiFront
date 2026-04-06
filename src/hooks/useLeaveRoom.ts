@@ -3,7 +3,7 @@ import { useAuth } from "./useAuth"
 import type { PlayerDto } from "../types/RoomPlayerDto"
 import { API_URL } from "../config"
 
-export function useLeaveRoom(onSuccess: () => void) {
+export function useLeaveRoom(onSuccess: () => void, onGroupLeave?: (roomId: number) => void) {
     const { email } = useAuth()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
@@ -33,7 +33,10 @@ export function useLeaveRoom(onSuccess: () => void) {
                 if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
             })
         )
-        .then(() => onSuccess())
+        .then(() => {
+            onGroupLeave?.(roomId)
+            onSuccess()
+        })
         .catch((err: Error) => setError(err.message))
         .finally(() => setLoading(false))
     }
