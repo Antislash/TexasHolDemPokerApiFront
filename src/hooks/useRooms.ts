@@ -22,7 +22,12 @@ export function useRooms() {
             if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
             return r.json() as Promise<RoomPlayerDto[]>
         })
-        .then(data => { if (data) setRooms(data) })
+        .then(data => {
+            if (data) {
+                setRooms(data)
+                subscribeToRooms(data.map(r => r.room.id))
+            }
+        })
         .catch((err: Error) => setError(err.message))
         .finally(() => setLoading(false))
     }
@@ -31,7 +36,7 @@ export function useRooms() {
         if (isAuthenticated) fetchRooms()
     }, [isAuthenticated])
 
-    const { joinGroup, leaveGroup } = useRoomHub(fetchRooms)
+    const { joinGroup, leaveGroup, subscribeToRooms } = useRoomHub(fetchRooms)
 
-    return { rooms, error, loading, refresh: fetchRooms, joinGroup, leaveGroup }
+    return { rooms, error, loading, refresh: fetchRooms, joinGroup, leaveGroup, subscribeToRooms }
 }

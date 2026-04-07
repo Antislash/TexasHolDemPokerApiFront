@@ -6,6 +6,7 @@ import { API_URL } from "../config"
 export function useRoomHub(onUpdate: () => void) {
     const connectionRef = useRef<signalR.HubConnection | null>(null)
     const onUpdateRef = useRef(onUpdate)
+    const pendingRoomsRef = useRef<number[]>([])
     const { isAuthenticated } = useAuth()
 
     useEffect(() => {
@@ -25,7 +26,15 @@ export function useRoomHub(onUpdate: () => void) {
         connection.on("PlayerJoined", () => onUpdateRef.current())
         connection.on("PlayerLeft", () => onUpdateRef.current())
 
-        connection.start().catch(console.error)
+        connection.start()
+            .then(() => {
+                pendingRoomsRef.current.forEach(id =>
+                    connection.invoke("JoinRoomGroup", id).catch(console.error)
+                )
+                pendingRoomsRef.current = []
+            })
+            .catch(console.error)
+
         connectionRef.current = connection
 
         return () => {
@@ -33,6 +42,16 @@ export function useRoomHub(onUpdate: () => void) {
             connectionRef.current = null
         }
     }, [isAuthenticated])
+
+    function subscribeToRooms(roomIds: number[]) {
+        if (connectionRef.current?.state === signalR.HubConnectionState.Connected) {
+            roomIds.forEach(id =>
+                connectionRef.current!.invoke("JoinRoomGroup", id).catch(console.error)
+            )
+        } else {
+            pendingRoomsRef.current = roomIds
+        }
+    }
 
     function joinGroup(roomId: number) {
         connectionRef.current?.invoke("JoinRoomGroup", roomId).catch(console.error)
@@ -42,5 +61,5 @@ export function useRoomHub(onUpdate: () => void) {
         connectionRef.current?.invoke("LeaveRoomGroup", roomId).catch(console.error)
     }
 
-    return { joinGroup, leaveGroup }
+    return { joinGroup, leaveGroup, subscribeToRooms }
 }
