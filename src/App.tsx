@@ -1,60 +1,11 @@
-import { useState } from 'react'
+import { RouterProvider } from 'react-router-dom'
 import { AuthProvider } from './context/provider/AuthProvider'
-import { useAuth } from './hooks/useAuth'
-import { useRooms } from './hooks/useRooms'
-import { GameTable } from './pages/singles/game/GameTable'
-import { Navigation } from './pages/singles/login/Navigation'
-import { RoomBrowse } from './pages/RoomBrowse'
-import { RoomStatus } from './types/RoomDto'
-import type { RoomPlayerDto } from './types/RoomPlayerDto'
-
-function AppContent() {
-  const { pseudo } = useAuth()
-  const { rooms, error: roomsError, loading: roomsLoading, refresh, leaveGroup } = useRooms()
-  const [activeGame, setActiveGame] = useState<RoomPlayerDto | null>(null)
-  const [currentView, setCurrentView] = useState<'rooms' | 'game'>('rooms')
-
-  const myPlayingRooms = rooms.filter(
-    rp => rp.room.status === RoomStatus.Playing && rp.players.some(p => p.pseudo === pseudo)
-  )
-
-  function handleEnterGame(rp: RoomPlayerDto) {
-    setActiveGame(rp)
-    setCurrentView('game')
-  }
-
-  return (
-    <>
-      <Navigation
-        myPlayingRooms={myPlayingRooms}
-        onEnterGame={handleEnterGame}
-      />
-      {currentView === 'game' && activeGame ? (
-        <GameTable
-          roomPlayer={activeGame}
-          currentPseudo={pseudo}
-          onExit={() => setCurrentView('rooms')}
-        />
-      ) : (
-        <div className="container">
-          <RoomBrowse
-            rooms={rooms}
-            roomsError={roomsError}
-            roomsLoading={roomsLoading}
-            onRefresh={refresh}
-            onEnterGame={handleEnterGame}
-            leaveGroup={leaveGroup}
-          />
-        </div>
-      )}
-    </>
-  )
-}
+import { router } from './router'
 
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <RouterProvider router={router} />
     </AuthProvider>
   )
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import type { RoomPlayerDto } from "../../../types/RoomPlayerDto";
 import { Login } from "./Login";
@@ -14,7 +15,7 @@ export function Navigation({ myPlayingRooms, onEnterGame }: NavigationProps) {
 
     return (
         <nav className="navbar navbar-light bg-light px-3">
-            <a className="navbar-brand">♠ Poker</a>
+            <Link to="/rooms" className="navbar-brand">♠ Poker</Link>
             <div className="d-flex gap-3 align-items-center">
                 {isAuthenticated && (
                     <div className="position-relative">
