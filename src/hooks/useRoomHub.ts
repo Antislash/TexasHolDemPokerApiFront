@@ -17,7 +17,7 @@ export function useRoomHub(onUpdate: () => void) {
         if (!isAuthenticated) return
 
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(`${API_URL}/hubs/poker`, {
+            .withUrl(`${API_URL}/hubs/rooms`, {
                 withCredentials: true
             })
             .withAutomaticReconnect()
