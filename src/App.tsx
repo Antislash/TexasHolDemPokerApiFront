@@ -10,7 +10,7 @@ import type { RoomPlayerDto } from './types/RoomPlayerDto'
 
 function AppContent() {
   const { pseudo } = useAuth()
-  const { rooms, error: roomsError, loading: roomsLoading, refresh, joinGroup, leaveGroup } = useRooms()
+  const { rooms, error: roomsError, loading: roomsLoading, refresh, leaveGroup } = useRooms()
   const [activeGame, setActiveGame] = useState<RoomPlayerDto | null>(null)
   const [currentView, setCurrentView] = useState<'rooms' | 'game'>('rooms')
 
@@ -43,7 +43,6 @@ function AppContent() {
             roomsLoading={roomsLoading}
             onRefresh={refresh}
             onEnterGame={handleEnterGame}
-            joinGroup={joinGroup}
             leaveGroup={leaveGroup}
           />
         </div>

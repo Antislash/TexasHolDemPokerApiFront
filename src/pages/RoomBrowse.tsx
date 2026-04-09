@@ -15,13 +15,12 @@ type RoomBrowseProps = {
     roomsLoading: boolean
     onRefresh: () => void
     onEnterGame: (rp: RoomPlayerDto) => void
-    joinGroup: (roomId: number) => void
     leaveGroup: (roomId: number) => void
 }
 
-export function RoomBrowse({ rooms, roomsError, roomsLoading, onRefresh, onEnterGame, joinGroup, leaveGroup }: RoomBrowseProps) {
+export function RoomBrowse({ rooms, roomsError, roomsLoading, onRefresh, onEnterGame, leaveGroup }: RoomBrowseProps) {
     const { isAuthenticated, pseudo } = useAuth()
-    const { joinRoom, error: joinError } = useJoinRoom(onRefresh, joinGroup)
+    const { joinRoom, error: joinError } = useJoinRoom(onRefresh)
     const { leaveRoom, error: leaveError } = useLeaveRoom(onRefresh, leaveGroup)
     const { startGame, error: startError } = useStartGame((roomId) => {
         const rp = rooms.find(r => r.room.id === roomId)

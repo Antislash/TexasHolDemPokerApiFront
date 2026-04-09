@@ -25,6 +25,7 @@ export function useRoomHub(onUpdate: () => void) {
 
         connection.on("PlayerJoined", () => onUpdateRef.current())
         connection.on("PlayerLeft", () => onUpdateRef.current())
+        connection.on("RoomCreated", () => onUpdateRef.current())
 
         connection.start()
             .then(() => {
@@ -53,13 +54,9 @@ export function useRoomHub(onUpdate: () => void) {
         }
     }
 
-    function joinGroup(roomId: number) {
-        connectionRef.current?.invoke("JoinRoomGroup", roomId).catch(console.error)
-    }
-
     function leaveGroup(roomId: number) {
         connectionRef.current?.invoke("LeaveRoomGroup", roomId).catch(console.error)
     }
 
-    return { joinGroup, leaveGroup, subscribeToRooms }
+    return { leaveGroup, subscribeToRooms }
 }

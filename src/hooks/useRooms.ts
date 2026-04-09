@@ -36,7 +36,7 @@ export function useRooms() {
         if (isAuthenticated) fetchRooms()
     }, [isAuthenticated])
 
-    const { joinGroup, leaveGroup, subscribeToRooms } = useRoomHub(fetchRooms)
+    const { leaveGroup, subscribeToRooms } = useRoomHub(fetchRooms)
 
-    return { rooms, error, loading, refresh: fetchRooms, joinGroup, leaveGroup, subscribeToRooms }
+    return { rooms, error, loading, refresh: fetchRooms, leaveGroup }
 }
