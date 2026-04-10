@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { useAuth } from "./useAuth"
+import { useAuthStore } from "../store/authStore"
 import type { PlayerDto } from "../types/RoomPlayerDto"
 import { API_URL } from "../config"
 
 export function useLeaveRoom(onSuccess: () => void, onGroupLeave?: (roomId: number) => void) {
-    const { email } = useAuth()
+    const { email } = useAuthStore()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 

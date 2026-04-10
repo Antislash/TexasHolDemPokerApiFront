@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
-import { useAuth } from "./useAuth"
+import { useAuthStore } from "../store/authStore"
 import type { RoomPlayerDto } from "../types/RoomPlayerDto"
 import { API_URL } from "../config"
 import { useRoomHub } from "./useRoomHub"
 
 export function useRooms() {
-    const { isAuthenticated, logout } = useAuth()
+    const { isAuthenticated, logout } = useAuthStore()
 
     const [rooms, setRooms] = useState<RoomPlayerDto[]>([])
     const [error, setError] = useState('')

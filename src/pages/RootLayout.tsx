@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
+import { useAuthStore } from '../store/authStore'
 import { useRooms } from '../hooks/useRooms'
 import { Navigation } from './singles/login/Navigation'
 import { RoomStatus } from '../types/RoomDto'
@@ -15,7 +15,7 @@ export type RoomsOutletContext = {
 
 export function RootLayout() {
     const navigate = useNavigate()
-    const { pseudo } = useAuth()
+    const { pseudo } = useAuthStore()
     const { rooms, error, loading, refresh, leaveGroup } = useRooms()
 
     const myPlayingRooms = rooms.filter(

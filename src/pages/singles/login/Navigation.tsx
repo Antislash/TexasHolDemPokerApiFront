@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuthStore } from "../../../store/authStore";
 import type { RoomPlayerDto } from "../../../types/RoomPlayerDto";
 import { Login } from "./Login";
 
@@ -11,7 +11,7 @@ type NavigationProps = {
 
 export function Navigation({ myPlayingRooms, onEnterGame }: NavigationProps) {
     const [open, setOpen] = useState(false)
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated } = useAuthStore()
 
     return (
         <nav className="navbar navbar-light bg-light px-3">

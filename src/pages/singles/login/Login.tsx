@@ -2,7 +2,7 @@ import { Button } from "../../../components/Button";
 import { useToggle } from "../../../hooks/useToggle";
 import { LogForm } from "./LogForm";
 import { RegisterForm } from "./RegisterForm";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuthStore } from "../../../store/authStore";
 
 /**
  * Login component that displays login and registration buttons, and shows the appropriate form when clicked. It also displays the user's pseudo and email when logged in, and a logout button.
@@ -12,7 +12,7 @@ export function Login()
 {
     const [log, toggleLog] = useToggle(false);
     const [register, toggleRegister] = useToggle(false);
-    const { pseudo, email, logout, isAuthenticated: token } = useAuth();
+    const { pseudo, email, logout, isAuthenticated: token } = useAuthStore();
 
     return (
         <div>

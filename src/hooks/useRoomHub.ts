@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react"
 import * as signalR from "@microsoft/signalr"
-import { useAuth } from "./useAuth"
+import { useAuthStore } from "../store/authStore"
 import { API_URL } from "../config"
 
 export function useRoomHub(onUpdate: () => void) {
     const connectionRef = useRef<signalR.HubConnection | null>(null)
     const onUpdateRef = useRef(onUpdate)
     const pendingRoomsRef = useRef<number[]>([])
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated } = useAuthStore()
 
     useEffect(() => {
         onUpdateRef.current = onUpdate

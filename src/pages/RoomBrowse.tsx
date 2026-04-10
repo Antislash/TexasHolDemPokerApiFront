@@ -1,6 +1,6 @@
 import { Alert } from "../components/Alert";
 import { Spinner } from "../components/Spinner";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthStore } from "../store/authStore";
 import { useJoinRoom } from "../hooks/useJoinRoom"
 import { useLeaveRoom } from "../hooks/useLeaveRoom";
 import { useStartGame } from "../hooks/useStartGame";
@@ -19,7 +19,7 @@ type RoomBrowseProps = {
 }
 
 export function RoomBrowse({ rooms, roomsError, roomsLoading, onRefresh, onEnterGame, leaveGroup }: RoomBrowseProps) {
-    const { isAuthenticated, pseudo } = useAuth()
+    const { isAuthenticated, pseudo } = useAuthStore()
     const { joinRoom, error: joinError } = useJoinRoom(onRefresh)
     const { leaveRoom, error: leaveError } = useLeaveRoom(onRefresh, leaveGroup)
     const { startGame, error: startError } = useStartGame((roomId) => {

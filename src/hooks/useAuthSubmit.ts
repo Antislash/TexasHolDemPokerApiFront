@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { useAuth } from "./useAuth"
+import { useAuthStore } from "../store/authStore"
 import type { AuthResponse } from "../types/AuthResponse"
 
 export function useAuthSubmit(url: string, onSuccess: () => void) {
-    const { login } = useAuth()
+    const { login } = useAuthStore()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 

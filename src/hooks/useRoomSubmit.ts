@@ -1,12 +1,12 @@
 import { useState } from "react"
-import { useAuth } from "./useAuth"
+import { useAuthStore } from "../store/authStore"
 import { RoomStatus } from "../types/RoomDto"
 import type { RoomDto } from "../types/RoomDto"
 import type { PlayerDto } from "../types/RoomPlayerDto"
 import { API_URL } from "../config"
 
 export function useRoomSubmit(onSuccess: () => void) {
-    const { email } = useAuth()
+    const { email } = useAuthStore()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
 
