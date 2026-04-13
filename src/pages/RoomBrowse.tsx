@@ -44,7 +44,7 @@ export function RoomBrowse({ rooms, roomsError, roomsLoading, onRefresh, onEnter
                 <p className="text-muted">Aucune room disponible.</p>
             )}
             <div className="row row-cols-1 row-cols-md-3 g-3">
-                {rooms.map((rp, i) => (
+                {rooms.filter(rp => rp.room.status === RoomStatus.Draft).map((rp, i) => (
                     <RoomCard
                         key={i}
                         room={rp.room}
