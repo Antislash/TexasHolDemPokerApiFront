@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { API_URL } from "../config"
-import { RoomStatus } from "../types/RoomDto"
 
 export function useStartGame(onSuccess: (roomId: number) => void) {
     const [error, setError] = useState('')
@@ -10,11 +9,10 @@ export function useStartGame(onSuccess: (roomId: number) => void) {
         setError('')
         setLoading(true)
 
-        fetch(`${API_URL}/room/${roomId}/status`, {
-            method: 'PATCH',
+        // POST /game/{roomId} → lance la partie et copie les joueurs depuis RoomPlayer
+        fetch(`${API_URL}/game/${roomId}`, {
+            method: 'POST',
             credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(RoomStatus.Playing),
         })
         .then(r => {
             if (r.status === 401) throw new Error("Non autorisé, veuillez vous connecter")

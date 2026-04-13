@@ -22,9 +22,9 @@ export function useLeaveRoom(onSuccess: () => void, onGroupLeave?: (roomId: numb
             if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
             return r.json() as Promise<PlayerDto>
         })
-        // 2. DELETE /roomPlayer/{roomId}/{playerId} → quitte la room
+        // 2. DELETE /room/{roomId}/players/{playerId} → quitte la room
         .then(player =>
-            fetch(`${API_URL}/roomPlayer/${roomId}/${player.id}`, {
+            fetch(`${API_URL}/room/${roomId}/players/${player.id}`, {
                 method: 'DELETE',
                 credentials: 'include',
             })

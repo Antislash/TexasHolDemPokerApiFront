@@ -14,7 +14,7 @@ export function useRoomSubmit(onSuccess: () => void) {
         setError('')
         setLoading(true)
 
-        // 1. POST /Player?email=... → PlayerDto
+        // 1. POST /player?email=... → PlayerDto
         fetch(`${API_URL}/player?email=${encodeURIComponent(email ?? '')}`, {
             method: 'POST',
             credentials: 'include',
@@ -24,7 +24,7 @@ export function useRoomSubmit(onSuccess: () => void) {
             if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
             return r.json() as Promise<PlayerDto>
         })
-        // 2. POST /Room → RoomDto
+        // 2. POST /room → RoomDto
         .then(player =>
             fetch(`${API_URL}/room`, {
                 method: 'POST',
@@ -43,9 +43,9 @@ export function useRoomSubmit(onSuccess: () => void) {
             })
             .then(room => ({ player, room }))
         )
-        // 3. POST /RoomPlayer/{roomId}/{playerId} → associe le joueur à la salle
+        // 3. POST /room/{roomId}/players/{playerId} → associe le joueur à la salle
         .then(({ player, room }) =>
-            fetch(`${API_URL}/roomPlayer/${room.id}/${player.id}`, {
+            fetch(`${API_URL}/room/${room.id}/players/${player.id}`, {
                 method: 'POST',
                 credentials: 'include',
             })

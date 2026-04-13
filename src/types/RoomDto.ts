@@ -1,7 +1,8 @@
 export const RoomStatus = {
     Draft: 0,
     Playing: 1,
-    Deleted: 2,
+    Finished: 2,
+    Deleted: 3,
 } as const
 
 export type RoomStatus = typeof RoomStatus[keyof typeof RoomStatus]

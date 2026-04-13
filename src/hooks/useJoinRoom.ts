@@ -22,10 +22,10 @@ export function useJoinRoom(onSuccess: () => void, onGroupJoin?: (roomId: number
             if (!r.ok) throw new Error(`Erreur serveur (${r.status})`)
             return r.json() as Promise<PlayerDto>
         })
-        // 2. PATCH /roomPlayer/{roomId}/{playerId} → rejoint la room
+        // 2. POST /room/{roomId}/players/{playerId} → rejoint la room
         .then(player =>
-            fetch(`${API_URL}/roomPlayer/${roomId}/${player.id}`, {
-                method: 'PATCH',
+            fetch(`${API_URL}/room/${roomId}/players/${player.id}`, {
+                method: 'POST',
                 credentials: 'include',
             })
             .then(r => {
